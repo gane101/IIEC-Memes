@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UNFILTERED — Blog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@400;500&family=DM+Mono&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #d42b2b;
+      --ink: #111010;
+      --paper: #f5f0e8;
+      --paper-dark: #ede8df;
+      --muted: #6b6459;
+      --rule: #c8bfb0;
+      --accent-yellow: #f5c842;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    /* ── HEADER ── */
+    header {
+      border-bottom: 3px double var(--ink);
+      padding: 2.5rem 0 1.5rem;
+      text-align: center;
+      position: relative;
+      background: var(--paper);
+    }
+
+    header::before {
+      content: '';
+      display: block;
+      height: 4px;
+      background: var(--red);
+      position: absolute;
+      top: 0; left: 0; right: 0;
+    }
+
+    .site-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.5rem;
+    }
+
+    .site-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(56px, 10vw, 100px);
+      letter-spacing: 4px;
+      line-height: 1;
+      color: var(--ink);
+    }
+
+    .site-desc {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--muted);
+      margin-top: 0.4rem;
+    }
+
+    nav {
+      margin-top: 1.25rem;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    nav a {
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    nav a:hover { border-color: var(--red); color: var(--red); }
+
+    /* ── HERO POST ── */
+    .hero {
+      max-width: 900px;
+      margin: 3rem auto 0;
+      padding: 0 2rem;
+    }
+
+    .hero-img {
+      width: 100%;
+      aspect-ratio: 16/7;
+      object-fit: cover;
+      display: block;
+      border: 2px solid var(--ink);
+    }
+
+    .hero-img-placeholder {
+      width: 100%;
+      aspect-ratio: 16/7;
+      background: var(--paper-dark);
+      border: 2px dashed var(--rule);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.5rem;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .hero-img-placeholder:hover { border-color: var(--red); }
+
+    .hero-img-placeholder .plus {
+      font-size: 32px;
+      line-height: 1;
+      color: var(--rule);
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .cat-badge {
+      background: var(--red);
+      color: #fff;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+    }
+
+    .post-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 6vw, 64px);
+      line-height: 1.05;
+      letter-spacing: 1px;
+      margin-top: 0.75rem;
+      color: var(--ink);
+    }
+
+    .hero-intro {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--muted);
+      margin-top: 0.75rem;
+      border-left: 3px solid var(--red);
+      padding-left: 1rem;
+      line-height: 1.6;
+    }
+
+    /* ── ARTICLE BODY ── */
+    .article-wrap {
+      max-width: 700px;
+      margin: 2.5rem auto 0;
+      padding: 0 2rem;
+    }
+
+    .article-body p {
+      margin-bottom: 1.4rem;
+      font-size: 17px;
+      line-height: 1.85;
+    }
+
+    .article-body h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      letter-spacing: 1px;
+      margin: 2.5rem 0 0.75rem;
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 0.25rem;
+    }
+
+    .article-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      margin: 2rem 0 0.5rem;
+      color: var(--red);
+    }
+
+    .article-body blockquote {
+      margin: 2rem 0;
+      padding: 1.25rem 1.5rem;
+      background: var(--paper-dark);
+      border-left: 5px solid var(--red);
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-style: italic;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+
+    .article-body blockquote cite {
+      display: block;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-style: normal;
+      color: var(--muted);
+      margin-top: 0.5rem;
+      letter-spacing: 1px;
+    }
+
+    .article-body ul, .article-body ol {
+      margin: 1.25rem 0 1.25rem 1.5rem;
+    }
+
+    .article-body li {
+      margin-bottom: 0.4rem;
+      font-size: 17px;
+    }
+
+    .article-body strong { font-weight: 500; }
+    .article-body em { font-style: italic; color: var(--muted); }
+
+    .article-body a {
+      color: var(--red);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* ── IN-ARTICLE IMAGE ── */
+    .article-image {
+      margin: 2.5rem -2rem;
+      position: relative;
+    }
+
+    .article-image img {
+      width: 100%;
+      display: block;
+      border-top: 2px solid var(--ink);
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .article-image figcaption {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      padding: 0.5rem 2rem 0;
+      letter-spacing: 0.5px;
+    }
+
+    .article-image-placeholder {
+      background: var(--paper-dark);
+      border-top: 2px dashed var(--rule);
+      border-bottom: 2px dashed var(--rule);
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .article-image-placeholder:hover {
+      border-color: var(--red);
+      background: #ede8df;
+    }
+
+    .article-image-placeholder .plus { font-size: 28px; color: var(--rule); }
+
+    /* ── PULL QUOTE ── */
+    .pull-quote {
+      margin: 2.5rem 0;
+      padding: 1rem 0;
+      border-top: 3px solid var(--ink);
+      border-bottom: 3px solid var(--ink);
+      text-align: center;
+    }
+
+    .pull-quote p {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(24px, 4vw, 36px);
+      letter-spacing: 1px;
+      line-height: 1.2;
+      color: var(--red);
+      margin: 0 !important;
+    }
+
+    /* ── AUTHOR ── */
+    .author-block {
+      margin-top: 3rem;
+      padding: 1.5rem;
+      background: var(--paper-dark);
+      border: 1px solid var(--rule);
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    .author-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--ink);
+      flex-shrink: 0;
+      object-fit: cover;
+      border: 2px solid var(--ink);
+    }
+
+    .author-avatar-placeholder {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--paper-dark);
+      border: 2px dashed var(--rule);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .author-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 1px;
+    }
+
+    .author-bio {
+      font-size: 14px;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+    }
+
+    .divider hr {
+      border: none;
+      border-top: 1px solid var(--rule);
+    }
+
+    .divider-ornament {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--rule);
+      line-height: 0;
+      position: relative;
+      top: -14px;
+      background: var(--paper);
+      display: inline-block;
+      padding: 0 1rem;
+    }
+
+    /* ── MORE POSTS GRID ── */
+    .more-posts {
+      max-width: 900px;
+      margin: 2rem auto 4rem;
+      padding: 0 2rem;
+    }
+
+    .section-heading {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1.5rem;
+    }
+
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+    }
+
+    .post-card {
+      border-top: 3px solid var(--ink);
+      padding-top: 0.75rem;
+    }
+
+    .post-card-img {
+      width: 100%;
+      aspect-ratio: 3/2;
+      object-fit: cover;
+      display: block;
+      margin-bottom: 0.75rem;
+      border: 1px solid var(--rule);
+    }
+
+    .post-card-img-placeholder {
+      width: 100%;
+      aspect-ratio: 3/2;
+      background: var(--paper-dark);
+      border: 1px dashed var(--rule);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      cursor: pointer;
+      margin-bottom: 0.75rem;
+      transition: border-color 0.2s;
+    }
+
+    .post-card-img-placeholder:hover { border-color: var(--red); }
+    .post-card-img-placeholder .plus { font-size: 22px; color: var(--rule); }
+
+    .post-card-cat {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.25rem;
+    }
+
+    .post-card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.5px;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 0.4rem;
+    }
+
+    .post-card-excerpt {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 2rem;
+      text-align: center;
+      border-top: 4px solid var(--red);
+    }
+
+    footer .footer-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 3px;
+      margin-bottom: 0.25rem;
+    }
+
+    footer p {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: #777;
+      letter-spacing: 1px;
+    }
+
+    /* ── IMAGE UPLOAD INPUT (hidden) ── */
+    input[type="file"] { display: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .hero, .article-wrap, .more-posts, .divider { padding: 0 1rem; }
+      .article-image { margin: 2rem -1rem; }
+      .article-image figcaption { padding-left: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     HEADER — change site title & tagline here
+════════════════════════════════════════════ -->
+<header>
+  <p class="site-tag">Est. 2026 — No filter required</p>
+  <h1 class="site-title">UNFILTERED</h1>
+  <p class="site-desc">Only Truth (maybe)</p>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Rants</a>
+    <a href="#">Hot Takes</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+  </nav>
+</header>
+
+
+<!-- ═══════════════════════════════════════════
+     HERO — main/featured post
+════════════════════════════════════════════ -->
+<article class="hero">
+
+  <div class="hero-meta">
+    <span class="cat-badge">Hot Take</span>  <!-- change category -->
+    <span class="post-date">15 April 2026</span>  <!-- change date -->
+  </div>
+
+  <!-- HEADLINE — edit this -->
+  <h2 class="hero-title"> Explaining why Hujaifa is a poison to society <br>And I Can Prove It</h2>
+
+  <!-- INTRO / DECK — edit this -->
+  <p class="hero-intro">
+    A detailed rant of why Hujaifa is a problem for whole IIEC no, for CSMU no, for whole World.
+  </p>
+
+</article>
+
+
+<!-- ═══════════════════════════════════════════
+     ARTICLE BODY
+════════════════════════════════════════════ -->
+<div class="article-wrap">
+  <div class="article-body">
+
+    <!-- Opening paragraph -->
+    <p>
+      Our very own treasurer may seem like a great man. He appears as if he is just a normal guy. But under that innocent image lies a dangerous man. Someone who can cause problems no one can even imagine.
+    </p>
+
+    <p>
+      Let's start with the quality of IIEC because of Hujaifa. Since his tenure started, there has been more problems than ever. What do you think is the reason? Is it our team's coordination? Is it our lack of members? No. It was Hujaifa. He is the obstacle stopping us from achieving greater heights. 
+    </p>
+
+    <!-- IN-ARTICLE IMAGE (full bleed) -->
+    <figure class="article-image">
+      <img
+        id="articleImg1"
+        src="graph.png"
+      />
+    </figure>
+
+    <p>
+      But you may think that this is the most damage he can do. But you would be wrong. He has one weapon that is much more destructive much more dangerous. And it's Geet Sharma. His friend. It's because of Geet that the inner demons of everyone comes out. Yes hujaifa was a good man. He was. But he has been manupulated by the evil Geet. He is the source of all the problems. The root cause of everything.
+    </p>
+
+    <p>
+      It has always been Geet who was working behind shadows. He is the mastermind. Hujaifa is just another victim of Geet who fell prey to his schemes. We must fight against Him and remove him from his position as Vice-President. That is the only solution that can save us now. 
+    </p>
+
+    <figure class="article-image">
+      <img
+        id="articleImg2"
+        src="astronaut.webp"
+      />
+    </figure>
+
+    <p>
+      You're welcome.
+    </p>
+
+  </div><!-- /.article-body -->
+
+</div><!-- /.article-wrap -->
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION DIVIDER
+════════════════════════════════════════════ -->
+<div class="divider">
+  <hr />
+  <div style="text-align:center">
+    <span class="divider-ornament">✦</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-title">UNFILTERED</div>
+  <p>© 2025 — All opinions final. No refunds.</p>
+</footer>
+
+
+<!-- ═══════════════════════════════════════════
+     IMAGE UPLOAD — hidden file input
+════════════════════════════════════════════ -->
+<input type="file" id="fileInput" accept="image/*" />
+
+<script>
+  let currentImgId = null;
+  let currentPlaceholderId = null;
+
+  function triggerUpload(imgId, placeholderId) {
+    currentImgId = imgId;
+    currentPlaceholderId = placeholderId;
+    document.getElementById('fileInput').click();
+  }
+
+  document.getElementById('fileInput').addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const img = document.getElementById(currentImgId);
+      const placeholder = document.getElementById(currentPlaceholderId);
+      img.src = e.target.result;
+      img.style.display = 'block';
+      placeholder.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+    this.value = '';
+  });
+</script>
+
+</body>
+</html>
